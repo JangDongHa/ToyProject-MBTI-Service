@@ -18,6 +18,8 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             "LIKE %:title%", nativeQuery = true)
     Optional<List<Post>> findAllPostByTitle(@Param("title") String title);
 
-    @Query(value = "SELECT MAX(post_syntax) FROM Post WHERE board_id =:board", nativeQuery = true)
-    Optional<Integer> findPostSyntaxByBoardId(long boardId);
+    @Query(value = "SELECT MAX(post_syntax) FROM Post WHERE board_id =:boardId", nativeQuery = true)
+    Optional<Long> findpost_syntaxByBoardId(long boardId);
+
+    //Optional<Post> findByBoardAndpost_syntax(Board board, long post_syntax);
 }

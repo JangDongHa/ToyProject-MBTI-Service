@@ -38,8 +38,8 @@ public class PostApiController {
     }
 
     @GetMapping("/api/board/{boardName}/id/{postId}")
-    public PostResponseDto getPost(@PathVariable Long postId){
-        return postService.getPost(postId);
+    public PostResponseDto getPost(@PathVariable String boardName, @PathVariable Long postId){
+        return postService.getPost(boardName, postId);
 
     }
 }

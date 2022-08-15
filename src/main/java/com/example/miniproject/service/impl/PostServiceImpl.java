@@ -56,7 +56,7 @@ public class PostServiceImpl implements PostService {
     }
 
 
-    public PostResponseDto getPost(Long postId) {
+    public PostResponseDto getPost(String boardName, Long postId) {
         return null;
     }
 }

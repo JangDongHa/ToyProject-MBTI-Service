@@ -1,10 +1,16 @@
 package com.example.miniproject.dto.response;
 
 import com.example.miniproject.domain.post.Post;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.http.HttpStatus;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
+@Setter
 public class PostResponseDto {
 
     private String title;
@@ -14,4 +20,5 @@ public class PostResponseDto {
 
     public PostResponseDto(HttpStatus ok, PostResponseDto post) {
     }
+
 }
