@@ -26,7 +26,8 @@ public class PostServiceImpl implements PostService {
     @Transactional(readOnly = true)
     public List<PostDto> getAllPostsByBoardName(String boardName){
         Board boardPS = boardRepository.findByName(boardName).orElseThrow(IllegalArgumentException::new);
-        List<Post> postsPS = postRepository.findAllByBoard(boardPS).orElseThrow(IllegalArgumentException::new);
+        List<Post> postsPS = postRepository.findAllByBoard(boardPS.getId()).orElseThrow(IllegalArgumentException::new);
+
 
         List<PostDto> postDtos = new ArrayList<>();
         postsPS.forEach(post -> postDtos.add(new PostDto(post)));
@@ -49,11 +50,13 @@ public class PostServiceImpl implements PostService {
     public PostResponseDto createPost(PostRequestDto requestDto) {
         Post post = new Post(requestDto);
         Post savedPost = postRepository.save(post);
-        PostResponseDto postDto = new PostResponseDto(savedPost);
-        return postDto;
+//        PostResponseDto postDto = new PostResponseDto(savedPost);
+//        return postDto;
+        return null;
     }
 
 
     public PostResponseDto getPost(Long postId) {
+        return null;
     }
 }

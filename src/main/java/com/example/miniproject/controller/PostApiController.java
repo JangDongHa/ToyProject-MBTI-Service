@@ -31,8 +31,9 @@ public class PostApiController {
     }
 
     @PostMapping("/api/board/{boardName}")
-    public ResponseDto<> createPost(@RequestBody PostRequestDto requestDto){
-        return new PostResponseDto(HttpStatus.OK, postService.createPost(requestDto));
+    public ResponseDto<String> createPost(@RequestBody PostRequestDto requestDto){
+        //return new PostResponseDto(HttpStatus.OK, postService.createPost(requestDto));
+        return null;
 
     }
 
