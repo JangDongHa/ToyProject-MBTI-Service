@@ -16,6 +16,7 @@ public class CorsConfig {
         CorsConfiguration config = new CorsConfiguration();
 
         config.setAllowCredentials(true);
+        // axios default withcredentials true
         config.addAllowedOriginPattern("*"); // 모든 IP에 대한 응답을 허용
         config.addAllowedOrigin("*");
         //config.addExposedHeader("Authorization");
