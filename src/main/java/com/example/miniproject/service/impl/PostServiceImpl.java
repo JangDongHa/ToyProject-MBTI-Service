@@ -20,6 +20,7 @@ public class PostServiceImpl implements PostService {
 
     private final BoardRepository boardRepository;
 
+    @Override
     @Transactional(readOnly = true)
     public List<PostDto> getAllPostsByBoardName(String boardName){
         Board boardPS = boardRepository.findByName(boardName).orElseThrow(IllegalArgumentException::new);
@@ -31,6 +32,7 @@ public class PostServiceImpl implements PostService {
         return postDtos;
     }
 
+    @Override
     @Transactional(readOnly = true)
     public List<PostDto> getPostByTitle(String title){
         List<Post> postsPS = postRepository.findAllPostByTitle(title).orElseThrow(IllegalArgumentException::new);
