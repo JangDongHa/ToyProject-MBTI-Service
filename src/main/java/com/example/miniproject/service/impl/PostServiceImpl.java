@@ -5,6 +5,7 @@ import com.example.miniproject.domain.board.BoardRepository;
 import com.example.miniproject.domain.post.Post;
 import com.example.miniproject.domain.post.PostRepository;
 import com.example.miniproject.dto.request.PostRequestDto;
+import com.example.miniproject.dto.request.PostUpdateRequestDto;
 import com.example.miniproject.dto.response.PostDto;
 import com.example.miniproject.dto.response.PostResponseDto;
 import com.example.miniproject.service.PostService;
@@ -49,11 +50,34 @@ public class PostServiceImpl implements PostService {
     public PostResponseDto createPost(PostRequestDto requestDto) {
         Post post = new Post(requestDto);
         Post savedPost = postRepository.save(post);
-        PostResponseDto postDto = new PostResponseDto(savedPost);
-        return postDto;
+        return new PostResponseDto(savedPost);
     }
 
+    public PostResponseDto getPost(String boardName, Long postId) {
+        Board board = boardRepository.findByName(boardName).orElseThrow(IllegalCallerException::new);
+        Post post = postRepository.findByNameAndPostSyntax(board, postId);
+        PostResponseDto postResponseDto = new PostResponseDto(post);
 
-    public PostResponseDto getPost(Long postId) {
+        postResponseDto.setTitle(post.getTitle());
+        postResponseDto.setUsername(post.getUser().getUsername());
+        postResponseDto.setContent(post.getContent());
+
+        return postResponseDto;
+
+    }
+
+    public PostResponseDto updatePost(String boardName, Long postId, PostUpdateRequestDto postUpdateRequestDto) {
+        Board board = boardRepository.findByName(boardName).orElseThrow(IllegalArgumentException::new);
+        Post post = postRepository.findByNameAndPostSyntax(board, postId);
+        post.update(postUpdateRequestDto);
+
+        Post updatedPost = postRepository.save(post);
+        return new PostResponseDto(updatedPost);
+
+    }
+
+    public void deletePost(String boardName, Long postId) {
+        postRepository.deleteByNameAndId(boardName, postId);
     }
 }
+

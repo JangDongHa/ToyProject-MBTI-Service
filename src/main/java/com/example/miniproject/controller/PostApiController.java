@@ -1,6 +1,7 @@
 package com.example.miniproject.controller;
 
 import com.example.miniproject.dto.request.PostRequestDto;
+import com.example.miniproject.dto.request.PostUpdateRequestDto;
 import com.example.miniproject.dto.response.PostDto;
 import com.example.miniproject.dto.response.PostResponseDto;
 import com.example.miniproject.dto.response.ResponseDto;
@@ -31,14 +32,28 @@ public class PostApiController {
     }
 
     @PostMapping("/api/board/{boardName}")
-    public ResponseDto<> createPost(@RequestBody PostRequestDto requestDto){
-        return new PostResponseDto(HttpStatus.OK, postService.createPost(requestDto));
+    public ResponseDto<PostResponseDto> createPost(@RequestBody PostRequestDto requestDto){
+        return new ResponseDto<>(HttpStatus.OK, postService.createPost(requestDto));
 
     }
 
     @GetMapping("/api/board/{boardName}/id/{postId}")
-    public PostResponseDto getPost(@PathVariable Long postId){
-        return postService.getPost(postId);
+    public ResponseDto<PostResponseDto> getPost(String boardName, @PathVariable Long postId){
+        return new ResponseDto<>(HttpStatus.OK, postService.getPost(boardName,postId));
 
+    }
+
+    @PutMapping("/api/board/{boardName}/id/{postId}")
+    public ResponseDto<PostResponseDto> updatePost(String boardName,
+                                                   @PathVariable Long postId,
+                                                   @RequestBody PostUpdateRequestDto postUpdateRequestDto){
+        return new ResponseDto<>(HttpStatus.OK, postService.updatePost(boardName,postId, postUpdateRequestDto));
+    }
+
+    @DeleteMapping("/api/board/{boardName}/id/{postId}")
+    public String deletePost(String boardName,
+                             @PathVariable Long postId){
+        postService.deletePost(boardName, postId);
+        return "삭제되었습니다.";
     }
 }

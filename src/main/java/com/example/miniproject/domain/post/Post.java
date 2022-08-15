@@ -5,6 +5,7 @@ import com.example.miniproject.domain.board.Board;
 import com.example.miniproject.domain.comment.Comment;
 import com.example.miniproject.domain.common.Timestamped;
 import com.example.miniproject.dto.request.PostRequestDto;
+import com.example.miniproject.dto.request.PostUpdateRequestDto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -51,5 +52,11 @@ public class Post extends Timestamped {
     public Post(PostRequestDto requestDto){
 
     }
+
+    public void update(PostUpdateRequestDto postUpdateRequestDto) {
+        this.title = postUpdateRequestDto.getTitle();
+        this.content = postUpdateRequestDto.getContent();
+    }
+
 
 }
