@@ -28,7 +28,7 @@ out/
 
 #application.yml
 #build.gradle
-#application-dev.yml
+application-dev.yml
 #application-prod.yml
 
 ### NetBeans ###
