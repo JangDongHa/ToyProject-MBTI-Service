@@ -34,6 +34,8 @@ public class SecurityConfig {
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 세션을 사용하지 않겠다는 정책
                 .and()
+                .cors()
+                .and()
                 .apply(new MyCustomDsl())
                 .and()
                 .formLogin().disable()
