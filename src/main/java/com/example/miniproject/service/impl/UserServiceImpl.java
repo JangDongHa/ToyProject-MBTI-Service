@@ -24,6 +24,7 @@ public class UserServiceImpl implements UserService {
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    @Override
     @Transactional
     public boolean registerUser(RequestUserDto dto){
         checkUsernameAndPassword(dto.getUsername(), dto.getPassword());
@@ -48,6 +49,7 @@ public class UserServiceImpl implements UserService {
         return m.find();
     }
 
+    @Override
     @Transactional
     public boolean updateUser(RequestUpdateUserDto dto, String usernameTK){
         User userPS = userRepository.findByUsername(usernameTK).orElseThrow(IllegalArgumentException::new);
@@ -56,6 +58,7 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
+    @Override
     @Transactional
     public boolean deleteUser(String usernameTK){
         User userPS = userRepository.findByUsername(usernameTK).orElseThrow(IllegalArgumentException::new);
@@ -65,6 +68,7 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
+    @Override
     @Transactional(readOnly = true)
     public UserDto getUser(String usernameTK){
         User userPS = userRepository.findByUsername(usernameTK).orElseThrow(IllegalArgumentException::new);

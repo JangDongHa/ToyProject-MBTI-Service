@@ -27,6 +27,9 @@ public class Post extends Timestamped {
     @Column(length = 100)
     private String title;
 
+    @Column
+    private Long post_syntax;
+
     @Lob
     private String content;
 
