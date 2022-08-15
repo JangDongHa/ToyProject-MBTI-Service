@@ -2,9 +2,13 @@ package com.example.miniproject.service.impl;
 
 import com.example.miniproject.domain.board.Board;
 import com.example.miniproject.domain.board.BoardRepository;
+import com.example.miniproject.domain.comment.Comment;
+import com.example.miniproject.domain.comment.CommentRepository;
 import com.example.miniproject.domain.post.Post;
 import com.example.miniproject.domain.post.PostRepository;
 import com.example.miniproject.dto.request.PostRequestDto;
+import com.example.miniproject.dto.request.RequestCommentDto;
+import com.example.miniproject.dto.response.CommentDto;
 import com.example.miniproject.dto.response.PostDto;
 import com.example.miniproject.dto.response.PostResponseDto;
 import com.example.miniproject.service.PostService;
@@ -20,6 +24,7 @@ import java.util.List;
 public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
 
+    private final CommentRepository commentRepository;
     private final BoardRepository boardRepository;
 
     @Override
@@ -47,16 +52,32 @@ public class PostServiceImpl implements PostService {
     }
 
 
-    public PostResponseDto createPost(PostRequestDto requestDto) {
-        Post post = new Post(requestDto);
-        Post savedPost = postRepository.save(post);
-//        PostResponseDto postDto = new PostResponseDto(savedPost);
-//        return postDto;
-        return null;
+//    public PostResponseDto createPost(PostRequestDto requestDto) {
+//        Post post = new Post(requestDto);
+//        Post savedPost = postRepository.save(post);
+////        PostResponseDto postDto = new PostResponseDto(savedPost);
+////        return postDto;
+//        return null;
+//    }
+
+    @Transactional
+    public CommentDto registerComment(String boardName, Long postId , RequestCommentDto requestCommentDto) {
+        Comment comment = new Comment(boardName, postId, requestCommentDto);
+        return new CommentDto(commentRepository.save(comment));
     }
 
+    @Transactional
+    public CommentDto updateComment(String boardName, Long postId, Long commentId, RequestCommentDto requestCommentDto) {
+        Board board = boardRepository.findByName(boardName).orElseThrow();
+        Post post = postRepository.findByBoardAndpost_syntax(board.getId(), postId).orElseThrow();
+        Comment comment = commentRepository.findByBoardAndpost_syntax(post.getId(), commentId).orElseThrow();
 
-    public PostResponseDto getPost(String boardName, Long postId) {
-        return null;
+        comment.update(requestCommentDto);
+        Comment updatedComment = commentRepository.save(comment);
+        return new CommentDto(updatedComment);
     }
+
+//    public PostResponseDto getPost(String boardName, Long postId) {
+//        return null;
+//    }
 }
