@@ -31,9 +31,9 @@ public class UserApiController {
     // 회원 수정
     @PutMapping("/api/user")
     public ResponseDto<Boolean> updateUser(@RequestBody RequestUpdateUserDto dto, HttpServletRequest request, HttpServletResponse response){
-        String updateUsername = dto.getUsername();
+        //String updateUsername = dto.getUsername();
         ResponseDto<Boolean> returnValue = new ResponseDto<>(HttpStatus.OK, userService.updateUser(dto, getUsername(request)));
-        updateResponseJWT(updateUsername, response);
+        //updateResponseJWT(updateUsername, response);
         return returnValue;
     }
 

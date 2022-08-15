@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
     public boolean updateUser(RequestUpdateUserDto dto, String usernameTK){
         User userPS = userRepository.findByUsername(usernameTK).orElseThrow(IllegalArgumentException::new);
 
-        userRepository.save(dto.toUser(userPS.getId(), userPS.getPassword(), userPS.getCreatedAt()));
+        userRepository.save(dto.toUser(userPS));
         return true;
     }
 
@@ -68,7 +68,7 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     public UserDto getUser(String usernameTK){
         User userPS = userRepository.findByUsername(usernameTK).orElseThrow(IllegalArgumentException::new);
-        return new UserDto(userPS.getUsername());
+        return new UserDto(userPS);
     }
 
 

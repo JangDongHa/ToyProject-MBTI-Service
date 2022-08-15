@@ -14,10 +14,13 @@ public class RequestUserDto {
     private String username;
     private String password;
 
+    private String nickname;
+
     public User toUser(){
         return User.builder()
                 .username(username)
                 .password(password)
+                .nickname(nickname)
                 .build();
     }
 }
