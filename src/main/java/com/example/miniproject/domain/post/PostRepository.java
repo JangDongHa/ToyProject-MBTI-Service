@@ -12,7 +12,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Optional<List<Post>> findAllByBoard(Board board);
 
     @Query(value = "SELECT *" +
-            " FROM post " +
+            " FROM Post " +
             "WHERE TITLE " +
             "LIKE %:title%", nativeQuery = true)
     Optional<List<Post>> findAllPostByTitle(@Param("title") String title);
