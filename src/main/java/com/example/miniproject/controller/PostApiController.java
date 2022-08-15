@@ -1,13 +1,13 @@
 package com.example.miniproject.controller;
 
+import com.example.miniproject.dto.request.PostRequestDto;
 import com.example.miniproject.dto.response.PostDto;
+import com.example.miniproject.dto.response.PostResponseDto;
 import com.example.miniproject.dto.response.ResponseDto;
 import com.example.miniproject.service.impl.PostServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,5 +28,17 @@ public class PostApiController {
     public ResponseDto<List<PostDto>> searchTitle(String title){
 
         return new ResponseDto<>(HttpStatus.OK, postService.getPostByTitle(title));
+    }
+
+    @PostMapping("/api/board/{boardName}")
+    public ResponseDto<> createPost(@RequestBody PostRequestDto requestDto){
+        return new PostResponseDto(HttpStatus.OK, postService.createPost(requestDto));
+
+    }
+
+    @GetMapping("/api/board/{boardName}/id/{postId}")
+    public PostResponseDto getPost(@PathVariable Long postId){
+        return postService.getPost(postId);
+
     }
 }
