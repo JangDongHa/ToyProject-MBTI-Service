@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.transaction.Transactional;
 import java.util.List;
 
+@CrossOrigin("*")
 @RestController
 @RequiredArgsConstructor
 public class PostApiController {
@@ -34,16 +35,23 @@ public class PostApiController {
 
     //게시글 등록
     @PostMapping("/api/board/{boardName}")
-    public ResponseDto<PostResponseDto> createPost(@RequestBody PostRequestDto requestDto){
+
+    public ResponseDto<PostResponseDto> createPost(String boardName,
+                                                   @PathVariable Long postId,
+                                                   @RequestBody PostRequestDto requestDto){
         return new ResponseDto<>(HttpStatus.OK, postService.createPost(requestDto));
+
+
 
 
     }
 
     //게시글 조회
     @GetMapping("/api/board/{boardName}/id/{postId}")
+
     public ResponseDto<PostResponseDto> getPost(String boardName, @PathVariable Long postId){
         return new ResponseDto<>(HttpStatus.OK, postService.getPost(boardName,postId));
+
 
     }
 
@@ -57,10 +65,10 @@ public class PostApiController {
     }
 
     //게시글 삭제
-    @DeleteMapping("/api/board/{boardName}/id/{postId}")
-    public String deletePost(String boardName,
-                             @PathVariable Long postId){
-        postService.deletePost(boardName, postId);
-        return "삭제되었습니다.";
-    }
+//    @DeleteMapping("/api/board/{boardName}/id/{postId}")
+//    public String deletePost(String boardName,
+//                             @PathVariable Long postId){
+//        postService.deletePost(boardName, postId);
+//        return "삭제되었습니다.";
+//    }
 }

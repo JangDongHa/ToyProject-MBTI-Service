@@ -54,13 +54,15 @@ public class PostServiceImpl implements PostService {
     public PostResponseDto createPost(PostRequestDto requestDto) {
         Post post = new Post(requestDto);
         Post savedPost = postRepository.save(post);
+
         return new PostResponseDto(savedPost);
+
 
     }
 
     public PostResponseDto getPost(String boardName, Long postId) {
         Board board = boardRepository.findByName(boardName).orElseThrow(IllegalCallerException::new);
-        Post post = postRepository.findByNameAndPostSyntax(board, postId); //orElse안써짐
+        Post post = postRepository.findByBoardAndpost_syntax(board.getId(), postId).orElseThrow(); //orElse안써짐
         PostResponseDto postResponseDto = new PostResponseDto(post);
 
         postResponseDto.setTitle(post.getTitle());
@@ -73,7 +75,7 @@ public class PostServiceImpl implements PostService {
 
     public PostResponseDto updatePost(String boardName, Long postId, PostUpdateRequestDto postUpdateRequestDto) {
         Board board = boardRepository.findByName(boardName).orElseThrow(IllegalArgumentException::new);
-        Post post = postRepository.findByNameAndPostSyntax(board, postId);
+        Post post = postRepository.findByBoardAndpost_syntax(board.getId(), postId).orElseThrow();
         post.update(postUpdateRequestDto);
 
         Post updatedPost = postRepository.save(post);
@@ -81,9 +83,11 @@ public class PostServiceImpl implements PostService {
 
     }
 
-    public void deletePost(String boardName, Long postId) {
-        postRepository.deleteByNameAndId(boardName, postId);
-
-    }
+//    public void deletePost(String boardName, Long postId) {
+////        postRepository.deleteByNameAndId(boardName, postId);
+//
+//
+//
+//    }
 }
 
