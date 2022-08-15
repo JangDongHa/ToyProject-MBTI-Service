@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @RestController
@@ -31,18 +32,23 @@ public class PostApiController {
         return new ResponseDto<>(HttpStatus.OK, postService.getPostByTitle(title));
     }
 
+    //게시글 등록
     @PostMapping("/api/board/{boardName}")
     public ResponseDto<PostResponseDto> createPost(@RequestBody PostRequestDto requestDto){
         return new ResponseDto<>(HttpStatus.OK, postService.createPost(requestDto));
 
+
     }
 
+    //게시글 조회
     @GetMapping("/api/board/{boardName}/id/{postId}")
     public ResponseDto<PostResponseDto> getPost(String boardName, @PathVariable Long postId){
         return new ResponseDto<>(HttpStatus.OK, postService.getPost(boardName,postId));
 
     }
 
+    //게시글 수정
+    @Transactional
     @PutMapping("/api/board/{boardName}/id/{postId}")
     public ResponseDto<PostResponseDto> updatePost(String boardName,
                                                    @PathVariable Long postId,
@@ -50,6 +56,7 @@ public class PostApiController {
         return new ResponseDto<>(HttpStatus.OK, postService.updatePost(boardName,postId, postUpdateRequestDto));
     }
 
+    //게시글 삭제
     @DeleteMapping("/api/board/{boardName}/id/{postId}")
     public String deletePost(String boardName,
                              @PathVariable Long postId){

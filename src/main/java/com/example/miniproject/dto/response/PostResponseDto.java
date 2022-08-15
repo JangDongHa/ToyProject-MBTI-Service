@@ -9,8 +9,8 @@ import org.springframework.http.HttpStatus;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Setter
 @Getter
+@Setter
 public class PostResponseDto {
 
     private String title;
@@ -18,10 +18,14 @@ public class PostResponseDto {
     private String content;
 
 
-    public PostResponseDto(HttpStatus ok, PostResponseDto post) {
-    }
+
 
     public PostResponseDto(Post savedPost) {
+        this.title = savedPost.getTitle();
+        this.username = savedPost.getUser().getUsername();
+        this.content = savedPost.getContent();
+
+
     }
 
 

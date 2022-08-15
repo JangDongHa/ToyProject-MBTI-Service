@@ -9,12 +9,15 @@ import com.example.miniproject.dto.request.PostUpdateRequestDto;
 import com.example.miniproject.dto.response.PostDto;
 import com.example.miniproject.dto.response.PostResponseDto;
 import com.example.miniproject.service.PostService;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
@@ -27,7 +30,8 @@ public class PostServiceImpl implements PostService {
     @Transactional(readOnly = true)
     public List<PostDto> getAllPostsByBoardName(String boardName){
         Board boardPS = boardRepository.findByName(boardName).orElseThrow(IllegalArgumentException::new);
-        List<Post> postsPS = postRepository.findAllByBoard(boardPS).orElseThrow(IllegalArgumentException::new);
+        List<Post> postsPS = postRepository.findAllByBoard(boardPS.getId()).orElseThrow(IllegalArgumentException::new);
+
 
         List<PostDto> postDtos = new ArrayList<>();
         postsPS.forEach(post -> postDtos.add(new PostDto(post)));
@@ -51,11 +55,12 @@ public class PostServiceImpl implements PostService {
         Post post = new Post(requestDto);
         Post savedPost = postRepository.save(post);
         return new PostResponseDto(savedPost);
+
     }
 
     public PostResponseDto getPost(String boardName, Long postId) {
         Board board = boardRepository.findByName(boardName).orElseThrow(IllegalCallerException::new);
-        Post post = postRepository.findByNameAndPostSyntax(board, postId);
+        Post post = postRepository.findByNameAndPostSyntax(board, postId); //orElse안써짐
         PostResponseDto postResponseDto = new PostResponseDto(post);
 
         postResponseDto.setTitle(post.getTitle());
@@ -78,6 +83,7 @@ public class PostServiceImpl implements PostService {
 
     public void deletePost(String boardName, Long postId) {
         postRepository.deleteByNameAndId(boardName, postId);
+
     }
 }
 

@@ -30,7 +30,7 @@ public class PostServiceTest {
     @BeforeEach
     public void settingData(){
         Board board = Board.builder().id(1L).description("test").name("testName").imageName("test").build();
-        User user = User.builder().id(1L).username("test").password("test").build();
+        User user = User.builder().id(1L).username("test").password("test").nickname("test").build();
 
         boardRepository.save(board);
         userRepository.save(user);
@@ -40,6 +40,7 @@ public class PostServiceTest {
                 .content("test")
                 .user(user)
                 .board(board)
+                .post_syntax(1L)
                 .build();
         Post post2 = Post.builder()
                 .id(2L)
@@ -47,6 +48,7 @@ public class PostServiceTest {
                 .content("test2")
                 .user(user)
                 .board(board)
+                .post_syntax(2L)
                 .build();
 
         postRepository.save(post);
@@ -59,8 +61,10 @@ public class PostServiceTest {
         // Given
         Board board = Board.builder().id(1L).description("test").name("testName").imageName("test").build();
         // When
-        List<Post> posts = postRepository.findAllByBoard(board).get();
+        List<Post> posts = postRepository.findAllByBoard(board.getId()).get();
         // Then
         assertEquals(2, posts.size());
+        System.out.println(posts.get(0).getTitle());
+        System.out.println(posts.get(1).getTitle());
     }
 }
