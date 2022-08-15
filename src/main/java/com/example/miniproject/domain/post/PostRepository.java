@@ -9,7 +9,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
-    Optional<List<Post>> findAllByBoard(Board board);
+    @Query(value = "SELECT * FROM Post WHERE board_id=:boardId ORDER BY post_syntax DESC", nativeQuery = true)
+    Optional<List<Post>> findAllByBoard(long boardId);
 
     @Query(value = "SELECT *" +
             " FROM Post " +
@@ -18,5 +19,5 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Optional<List<Post>> findAllPostByTitle(@Param("title") String title);
 
     @Query(value = "SELECT MAX(post_syntax) FROM Post WHERE board_id =:board", nativeQuery = true)
-    Optional<Integer> findPostSyntaxByBoardId(int board);
+    Optional<Integer> findPostSyntaxByBoardId(long boardId);
 }
