@@ -14,8 +14,8 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://toyproject.c4tcez4ig8fa.ap-northeast-2.rds.amazonaws.com:3306/toyProject?serverTimezone=Asia/Seoul
-    username: ekgusdlwhgdk
-    password: qjqtk12!
+    username:
+    password:
 
   jpa:
     hibernate:

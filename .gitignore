@@ -26,10 +26,10 @@ out/
 !**/src/main/**/out/
 !**/src/test/**/out/
 
-#application.yml
+application.yml
 #build.gradle
 application-dev.yml
-#application-prod.yml
+application-prod.yml
 
 ### NetBeans ###
 /nbproject/private/
