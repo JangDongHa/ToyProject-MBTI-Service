@@ -5,7 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.http.HttpStatus;
+
+import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,13 +18,19 @@ public class PostResponseDto {
     private String username;
     private String content;
 
+    private LocalDateTime createdAt;
+
+    private LocalDateTime modifiedAt;
+
 
 
 
     public PostResponseDto(Post savedPost) {
+        this.createdAt = savedPost.getCreatedAt();
         this.title = savedPost.getTitle();
         this.username = savedPost.getUser().getUsername();
         this.content = savedPost.getContent();
+        this.modifiedAt = savedPost.getModifiedAt();
 
 
     }

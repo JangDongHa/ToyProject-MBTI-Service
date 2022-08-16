@@ -49,10 +49,6 @@ public class Post extends Timestamped {
     @OrderBy("id desc")
     private List<Comment> comments;
 
-    public Post(PostRequestDto requestDto){
-
-    }
-
     public void update(PostUpdateRequestDto postUpdateRequestDto) {
         this.title = postUpdateRequestDto.getTitle();
         this.content = postUpdateRequestDto.getContent();
