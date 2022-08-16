@@ -32,6 +32,6 @@ public class User extends Timestamped {
     private String nickname;
 
     @JsonIgnoreProperties({"user"})
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Post> post;
 }

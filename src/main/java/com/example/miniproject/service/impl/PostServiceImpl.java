@@ -6,6 +6,8 @@ import com.example.miniproject.domain.comment.Comment;
 import com.example.miniproject.domain.comment.CommentRepository;
 import com.example.miniproject.domain.post.Post;
 import com.example.miniproject.domain.post.PostRepository;
+import com.example.miniproject.domain.user.User;
+import com.example.miniproject.domain.user.UserRepository;
 import com.example.miniproject.dto.request.PostRequestDto;
 import com.example.miniproject.dto.request.RequestCommentDto;
 import com.example.miniproject.dto.response.CommentDto;
@@ -13,11 +15,14 @@ import com.example.miniproject.dto.response.PostDto;
 import com.example.miniproject.dto.response.PostResponseDto;
 import com.example.miniproject.service.PostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,9 +32,11 @@ public class PostServiceImpl implements PostService {
     private final CommentRepository commentRepository;
     private final BoardRepository boardRepository;
 
+    private final UserRepository userRepository;
+
     @Override
     @Transactional(readOnly = true)
-    public List<PostDto> getAllPostsByBoardName(String boardName){
+    public List<PostDto> getAllPostsByBoardName(String boardName) {
         Board boardPS = boardRepository.findByName(boardName).orElseThrow(IllegalArgumentException::new);
         List<Post> postsPS = postRepository.findAllByBoard(boardPS.getId()).orElseThrow(IllegalArgumentException::new);
 
@@ -42,7 +49,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<PostDto> getPostByTitle(String title){
+    public List<PostDto> getPostByTitle(String title) {
         List<Post> postsPS = postRepository.findAllPostByTitle(title).orElseThrow(IllegalArgumentException::new);
         List<PostDto> postDtos = new ArrayList<>();
 
@@ -52,32 +59,38 @@ public class PostServiceImpl implements PostService {
     }
 
 
-//    public PostResponseDto createPost(PostRequestDto requestDto) {
-//        Post post = new Post(requestDto);
-//        Post savedPost = postRepository.save(post);
-////        PostResponseDto postDto = new PostResponseDto(savedPost);
-////        return postDto;
-//        return null;
-//    }
-
     @Transactional
-    public CommentDto registerComment(String boardName, Long postId , RequestCommentDto requestCommentDto) {
-        Comment comment = new Comment(boardName, postId, requestCommentDto);
+    public CommentDto registerComment(String boardName, String username, RequestCommentDto requestCommentDto) {
+        Board board = boardRepository.findByName(boardName).orElseThrow();
+        long postSyntax = postRepository.findpost_syntaxByBoardId(board.getId()).orElse(0L);
+        Post post = postRepository.findByBoardAndpost_syntax(board.getId(), postSyntax).orElseThrow();
+        User user = userRepository.findByUsername(username).orElseThrow();
+        Comment comment = Comment.builder().board(board).user(user).post(post).content(requestCommentDto.getContent()).build();
         return new CommentDto(commentRepository.save(comment));
     }
 
     @Transactional
-    public CommentDto updateComment(String boardName, Long postId, Long commentId, RequestCommentDto requestCommentDto) {
-        Board board = boardRepository.findByName(boardName).orElseThrow();
-        Post post = postRepository.findByBoardAndpost_syntax(board.getId(), postId).orElseThrow();
-        Comment comment = commentRepository.findByBoardAndpost_syntax(post.getId(), commentId).orElseThrow();
-
-        comment.update(requestCommentDto);
-        Comment updatedComment = commentRepository.save(comment);
-        return new CommentDto(updatedComment);
+    public Boolean updateComment(Long commentId, String username, RequestCommentDto requestCommentDto) {
+        Comment comment = commentRepository.findById(commentId).orElseThrow();
+        if(comment.getUser().getUsername().equals(username)){
+            comment.update(requestCommentDto);
+            return true;
+        } else {
+            return false;
+        }
     }
 
-//    public PostResponseDto getPost(String boardName, Long postId) {
-//        return null;
-//    }
+    @Transactional
+    public Boolean deleteComment(String username, Long commentId) {
+        Comment comment = commentRepository.findById(commentId).orElseThrow();
+        if(comment.getUser().getUsername().equals(username)){
+            commentRepository.delete(comment);
+            return true;
+        } else {
+            return false;
+        }
+
+    }
 }
+
+

@@ -43,6 +43,8 @@ public class Post extends Timestamped {
     @ManyToOne
     private Board board;
 
+
+
     @OneToMany(mappedBy = "post", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @JsonIgnoreProperties({"post"})
     @OrderBy("id desc")

@@ -30,4 +30,6 @@ public class CommentDto {
         this.username = comment.getUser().getUsername();
         this.createAt = comment.getCreatedAt();
     }
+
+
 }

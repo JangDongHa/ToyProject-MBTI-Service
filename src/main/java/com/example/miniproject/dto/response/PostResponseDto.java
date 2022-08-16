@@ -5,8 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.http.HttpStatus;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -18,7 +16,16 @@ public class PostResponseDto {
     private String content;
 
 
-    public PostResponseDto(HttpStatus ok, PostResponseDto post) {
+
+
+    public PostResponseDto(Post savedPost) {
+        this.title = savedPost.getTitle();
+        this.username = savedPost.getUser().getUsername();
+        this.content = savedPost.getContent();
+
+
     }
 
+
 }
+

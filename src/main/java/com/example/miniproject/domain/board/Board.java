@@ -30,5 +30,4 @@ public class Board extends Timestamped {
     @Column
     private String description;
 
-
 }

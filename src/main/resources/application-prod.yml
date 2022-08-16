@@ -35,9 +35,9 @@ spring:
       enabled: always
 
 
-
-logging:
-  level:
-    '[org.apache.coyote.http11]': DEBUG
-    '[org.springframework.web]': DEBUG
-    '[org.hibernate]': DEBUG
+#
+#logging:
+#  level:
+#    '[org.apache.coyote.http11]': DEBUG
+#    '[org.springframework.web]': DEBUG
+#    '[org.hibernate]': DEBUG
