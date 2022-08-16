@@ -52,7 +52,7 @@ public class PostApiController {
     @DeleteMapping("/api/board/{boardName}/id/{postId}")
     public String deletePost(String boardName,
                              @PathVariable Long postId){
-        postService.deletePost(boardName, postId);
+        //postService.deletePost(boardName, postId);
         return "삭제되었습니다.";
     }
 }
