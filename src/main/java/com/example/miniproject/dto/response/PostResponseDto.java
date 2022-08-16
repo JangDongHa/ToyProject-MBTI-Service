@@ -21,4 +21,9 @@ public class PostResponseDto {
     public PostResponseDto(HttpStatus ok, PostResponseDto post) {
     }
 
+
+    public PostResponseDto(Post savedPost) {
+    }
+
+
 }
