@@ -57,7 +57,7 @@ public class PostServiceImpl implements PostService {
 
     public PostResponseDto getPost(String boardName, Long postId) {
         Board board = boardRepository.findByName(boardName).orElseThrow(IllegalCallerException::new);
-        Post post = postRepository.findByNameAndPostSyntax(board, postId);
+        Post post = postRepository.findByBoardAndpost_syntax(board.getId(), postId).orElseThrow(IllegalArgumentException::new);
         PostResponseDto postResponseDto = new PostResponseDto(post);
 
         postResponseDto.setTitle(post.getTitle());
@@ -69,7 +69,7 @@ public class PostServiceImpl implements PostService {
 
     public PostResponseDto updatePost(String boardName, Long postId, PostUpdateRequestDto postUpdateRequestDto) {
         Board board = boardRepository.findByName(boardName).orElseThrow(IllegalArgumentException::new);
-        Post post = postRepository.findByNameAndPostSyntax(board, postId);
+        Post post = postRepository.findByBoardAndpost_syntax(board.getId(), postId).orElseThrow(IllegalArgumentException::new);
         post.update(postUpdateRequestDto);
 
         Post updatedPost = postRepository.save(post);
