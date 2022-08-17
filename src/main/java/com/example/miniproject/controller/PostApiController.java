@@ -80,7 +80,7 @@ public class PostApiController {
     }
 
 
-    @PostMapping("/api/{boardName}/id/{postSyntax}/comment")
+    @PostMapping("/api/board/{boardName}/id/{postSyntax}/comment")
     public ResponseDto<Boolean> registerComment (@PathVariable String boardName, @PathVariable long postSyntax, HttpServletRequest request, @RequestBody RequestCommentDto requestCommentDto) {
         postService.registerComment(boardName,getUsername(request),requestCommentDto, postSyntax);
         return new ResponseDto<>(HttpStatus.OK, true);
@@ -88,14 +88,14 @@ public class PostApiController {
 
 
 
-    @PutMapping("/api/{boardName}/id/{postSyntax}/comment/{commentId}")
+    @PutMapping("/api/board/{boardName}/id/{postSyntax}/comment/{commentId}")
     public ResponseDto<Boolean> updateComment (@PathVariable Long commentId,HttpServletRequest request,@RequestBody RequestCommentDto requestCommentDto ) {
         postService.updateComment(commentId, getUsername(request), requestCommentDto);
         return new ResponseDto<>(HttpStatus.OK, true);
     }
 
 
-    @DeleteMapping("/api/{boardName}/id/{postId}/comment/{commentId}")
+    @DeleteMapping("/api/board/{boardName}/id/{postId}/comment/{commentId}")
     public  ResponseDto<Boolean> deleteComment (HttpServletRequest request, @PathVariable Long commentId){
         postService.deleteComment(getUsername(request), commentId);
         return new ResponseDto<>(HttpStatus.OK, true);
