@@ -1,5 +1,6 @@
 package com.example.miniproject.domain.post;
 
+
 import com.example.miniproject.domain.board.Board;
 import com.example.miniproject.dto.response.PostResponseDto;
 import org.springframework.data.jpa.repository.JpaRepository;

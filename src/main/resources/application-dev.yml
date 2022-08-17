@@ -13,10 +13,9 @@ spring:
     allow-circular-references: true
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://database-1.czwa1zqemqal.ap-northeast-2.rds.amazonaws.com/miniProject?serverTimezone=Asia/Seoul
-    username: miniProject
-    password: Dnr:4fkdgo!
-
+    url: jdbc:mysql://toyproject.c4tcez4ig8fa.ap-northeast-2.rds.amazonaws.com:3306/toyProject?serverTimezone=Asia/Seoul
+    username:
+    password:
 
   jpa:
     hibernate:
@@ -35,9 +34,9 @@ spring:
       enabled: always
 
 
-
-logging:
-  level:
-    '[org.apache.coyote.http11]': DEBUG
-    '[org.springframework.web]': DEBUG
-    '[org.hibernate]': DEBUG
+#
+#logging:
+#  level:
+#    '[org.apache.coyote.http11]': DEBUG
+#    '[org.springframework.web]': DEBUG
+#    '[org.hibernate]': DEBUG

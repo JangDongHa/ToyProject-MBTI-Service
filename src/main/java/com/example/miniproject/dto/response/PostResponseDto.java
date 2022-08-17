@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -31,9 +32,8 @@ public class PostResponseDto {
         this.username = savedPost.getUser().getUsername();
         this.content = savedPost.getContent();
         this.modifiedAt = savedPost.getModifiedAt();
-
-
     }
 
 
 }
+

@@ -2,6 +2,8 @@ package com.example.miniproject.controller;
 
 import com.example.miniproject.config.jwt.token.RequestToken;
 import com.example.miniproject.dto.request.PostRequestDto;
+import com.example.miniproject.dto.request.RequestCommentDto;
+import com.example.miniproject.dto.response.CommentDto;
 import com.example.miniproject.dto.request.PostUpdateRequestDto;
 import com.example.miniproject.dto.response.PostDto;
 import com.example.miniproject.dto.response.PostResponseDto;
@@ -22,15 +24,20 @@ public class PostApiController {
 
     private final PostServiceImpl postService;
 
+    private String getUsername(HttpServletRequest request){
+        RequestToken requestToken = new RequestToken(request);
+        return requestToken.getUsername().orElseThrow();
+    }
+
     // 게시판 조회
     @GetMapping("/api/board/{boardName}/all")
-    public ResponseDto<List<PostDto>> getAllpostsInBoard(@PathVariable String boardName){
+    public ResponseDto<List<PostDto>> getAllpostsInBoard(@PathVariable String boardName) {
         return new ResponseDto<>(HttpStatus.OK, postService.getAllPostsByBoardName(boardName));
     }
 
     // 검색 기능 (title 조회)
     @GetMapping("/api/search")
-    public ResponseDto<List<PostDto>> searchTitle(String title){
+    public ResponseDto<List<PostDto>> searchTitle(String title) {
 
         return new ResponseDto<>(HttpStatus.OK, postService.getPostByTitle(title));
     }
@@ -58,7 +65,7 @@ public class PostApiController {
                                                 @PathVariable Long postSyntax){
         return new ResponseDto<>(HttpStatus.OK, postService.getPost(boardName,postSyntax));
     }
-
+    
     //게시글 수정
     @Transactional
     @PutMapping("/api/board/{boardName}/id/{postSyntax}")
@@ -78,4 +85,30 @@ public class PostApiController {
         postService.deletePost(boardName, postSyntax, getUsername(request));
         return new ResponseDto<>(HttpStatus.OK, true);
     }
+
+
+    @PostMapping("/api/{boardName}/id/{postSyntax}/comment")
+    public ResponseDto<Boolean> registerComment (@PathVariable String boardName, HttpServletRequest request, @RequestBody RequestCommentDto requestCommentDto) {
+        postService.registerComment(boardName,getUsername(request),requestCommentDto);
+        return new ResponseDto<>(HttpStatus.OK, true);
+    }
+
+
+
+    @PutMapping("/api/{boardName}/id/{postSyntax}/comment/{commentId}")
+    public ResponseDto<Boolean> updateComment (@PathVariable Long commentId,HttpServletRequest request,@RequestBody RequestCommentDto requestCommentDto ){
+        postService.updateComment(commentId,getUsername(request),requestCommentDto);
+    }
+
+
+    @DeleteMapping("/api/{boardName}/id/{postId}/comment/{commentId}")
+    public  ResponseDto<Boolean> deleteComment (HttpServletRequest request, @PathVariable Long commentId){
+        postService.deleteComment(getUsername(request), commentId);
+        return new ResponseDto<>(HttpStatus.OK, true);
+    }
+    
+    
+
+
 }
+
