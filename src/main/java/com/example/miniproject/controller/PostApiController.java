@@ -1,5 +1,6 @@
 package com.example.miniproject.controller;
 
+import com.example.miniproject.config.jwt.token.RequestToken;
 import com.example.miniproject.dto.request.PostRequestDto;
 import com.example.miniproject.dto.request.PostUpdateRequestDto;
 import com.example.miniproject.dto.response.PostDto;
@@ -10,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 import java.util.List;
 
 @CrossOrigin("*")
@@ -32,27 +35,47 @@ public class PostApiController {
         return new ResponseDto<>(HttpStatus.OK, postService.getPostByTitle(title));
     }
 
+
+    private String getUsername(HttpServletRequest request){
+        RequestToken requestToken = new RequestToken(request);
+        return requestToken.getUsername().orElseThrow();
+    }
+
+    //게시글 등록
     @PostMapping("/api/board/{boardName}")
-    public ResponseDto<PostResponseDto> createPost(@RequestBody PostRequestDto requestDto){
-        return new ResponseDto<>(HttpStatus.OK, postService.createPost(requestDto));
+    public ResponseDto<Boolean> createPost(@PathVariable String boardName,
+                                                   @RequestBody PostRequestDto requestDto,
+                                                   HttpServletRequest request){
+        postService.createPost(boardName, getUsername(request), requestDto);
+        return new ResponseDto<>(HttpStatus.OK, true);
     }
 
-    @GetMapping("/api/board/{boardName}/id/{postId}")
-    public ResponseDto<PostResponseDto> getPost(String boardName, @PathVariable Long postId){
-        return new ResponseDto<>(HttpStatus.OK, postService.getPost(boardName,postId));
+
+    //게시글 조회
+    @GetMapping("/api/board/{boardName}/id/{postSyntax}")
+
+    public ResponseDto<PostResponseDto> getPost(@PathVariable String boardName,
+                                                @PathVariable Long postSyntax){
+        return new ResponseDto<>(HttpStatus.OK, postService.getPost(boardName,postSyntax));
     }
 
-    @PutMapping("/api/board/{boardName}/id/{postId}")
-    public ResponseDto<PostResponseDto> updatePost(String boardName,
-                                                   @PathVariable Long postId,
-                                                   @RequestBody PostUpdateRequestDto postUpdateRequestDto){
-        return new ResponseDto<>(HttpStatus.OK, postService.updatePost(boardName,postId, postUpdateRequestDto));
+    //게시글 수정
+    @Transactional
+    @PutMapping("/api/board/{boardName}/id/{postSyntax}")
+    public ResponseDto<PostResponseDto> updatePost(@PathVariable String boardName,
+                                                   @PathVariable Long postSyntax,
+                                                   @RequestBody PostUpdateRequestDto postUpdateRequestDto,
+                                                   HttpServletRequest request){
+
+        return new ResponseDto<>(HttpStatus.OK,postService.updatePost(boardName, postSyntax, postUpdateRequestDto, getUsername(request)) );
     }
 
-    @DeleteMapping("/api/board/{boardName}/id/{postId}")
-    public String deletePost(String boardName,
-                             @PathVariable Long postId){
-        //postService.deletePost(boardName, postId);
-        return "삭제되었습니다.";
+    //게시글 삭제
+    @DeleteMapping("/api/board/{boardName}/id/{postSyntax}")
+    public ResponseDto<Boolean> deletePost(@PathVariable String boardName,
+                                           @PathVariable Long postSyntax,
+                                           HttpServletRequest request){
+        postService.deletePost(boardName, postSyntax, getUsername(request));
+        return new ResponseDto<>(HttpStatus.OK, true);
     }
 }

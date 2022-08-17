@@ -5,10 +5,12 @@ import com.example.miniproject.dto.response.PostResponseDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
+@Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
     @Query(value = "SELECT * FROM Post WHERE board_id=:boardId ORDER BY post_syntax DESC", nativeQuery = true)
     Optional<List<Post>> findAllByBoard(long boardId);
@@ -24,4 +26,5 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     @Query(value = "SELECT * FROM Post WHERE board_id=:boardId AND post_syntax=:post_syntax", nativeQuery = true)
     Optional<Post> findByBoardAndpost_syntax(long boardId, long post_syntax);
+
 }
