@@ -19,7 +19,7 @@ import java.util.List;
 public class PostResponseDto {
 
     private String title;
-    private String username;
+    private String nickname;
     private String content;
 
     private LocalDateTime createdAt;
@@ -34,7 +34,7 @@ public class PostResponseDto {
     public PostResponseDto(Post savedPost) {
         this.createdAt = savedPost.getCreatedAt();
         this.title = savedPost.getTitle();
-        this.username = savedPost.getUser().getUsername();
+        this.nickname = savedPost.getUser().getNickname();
         this.content = savedPost.getContent();
         this.modifiedAt = savedPost.getModifiedAt();
         List<Comment> commentsPS = savedPost.getComments();

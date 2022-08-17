@@ -64,12 +64,17 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional
     public CommentDto registerComment(String boardName, String username, RequestCommentDto requestCommentDto, long reqPostSyntax) {
-        Board board = boardRepository.findByName(boardName).orElseThrow();
-        Post post = postRepository.findByBoardAndpost_syntax(board.getId(), reqPostSyntax).orElseThrow();
-        User user = userRepository.findByUsername(username).orElseThrow();
-        Comment comment = Comment.builder().board(board).user(user).post(post).content(requestCommentDto.getContent()).build();
-        return new CommentDto(commentRepository.save(comment));
+        if (!requestCommentDto.isEmpty()){
+            Board board = boardRepository.findByName(boardName).orElseThrow();
+            Post post = postRepository.findByBoardAndpost_syntax(board.getId(), reqPostSyntax).orElseThrow();
+            User user = userRepository.findByUsername(username).orElseThrow();
+            Comment comment = Comment.builder().board(board).user(user).post(post).content(requestCommentDto.getContent()).build();
+            return new CommentDto(commentRepository.save(comment));
+        }
+        else
+            throw new IllegalArgumentException();
     }
+
 
     @Override
     @Transactional

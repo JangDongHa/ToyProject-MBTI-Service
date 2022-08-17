@@ -13,5 +13,11 @@ import lombok.Setter;
 @Setter
 public class RequestCommentDto{
     private String content;
+
+    public boolean isEmpty(){
+        if (content.equals(""))
+            return true;
+        return false;
+    }
 }
 
