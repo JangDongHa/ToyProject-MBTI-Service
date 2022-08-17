@@ -43,7 +43,6 @@ public class PostApiController {
 
     //게시글 등록
     @PostMapping("/api/board/{boardName}")
-
     public ResponseDto<Boolean> createPost(@PathVariable String boardName,
                                                    @RequestBody PostRequestDto requestDto,
                                                    HttpServletRequest request){
