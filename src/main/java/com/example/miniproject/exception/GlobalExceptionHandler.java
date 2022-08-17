@@ -34,4 +34,9 @@ public class GlobalExceptionHandler {
 
         return new ResponseDto<>(HttpStatus.EXPECTATION_FAILED, false);
     }
+
+    @ExceptionHandler(value = SecurityException.class)
+    public ResponseDto<Boolean> passwordInconsistency(SecurityException e){
+        return new ResponseDto<>(HttpStatus.NOT_ACCEPTABLE, false);
+    }
 }

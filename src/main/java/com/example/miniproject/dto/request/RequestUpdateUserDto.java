@@ -14,13 +14,15 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class RequestUpdateUserDto {
     private String nickname;
+    private String password;
+    private String pastPassword;
 
     public User toUser(User user){
         return User.builder()
                 .id(user.getId())
                 .username(user.getUsername())
                 .nickname(nickname)
-                .password(user.getPassword())
+                .password(password)
                 .createdAt(user.getCreatedAt())
                 .build();
     }

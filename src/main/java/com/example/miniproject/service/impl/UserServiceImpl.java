@@ -8,6 +8,7 @@ import com.example.miniproject.dto.response.UserDto;
 import com.example.miniproject.exception.ExceptionNamingHandler;
 import com.example.miniproject.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,7 +55,13 @@ public class UserServiceImpl implements UserService {
     public boolean updateUser(RequestUpdateUserDto dto, String usernameTK){
         User userPS = userRepository.findByUsername(usernameTK).orElseThrow(IllegalArgumentException::new);
 
-        userRepository.save(dto.toUser(userPS));
+        if (bCryptPasswordEncoder.matches(dto.getPastPassword(), userPS.getPassword())){
+            dto.setPassword(bCryptPasswordEncoder.encode(dto.getPassword()));
+            userRepository.save(dto.toUser(userPS));
+        }
+        else
+            throw new SecurityException();
+
         return true;
     }
 
