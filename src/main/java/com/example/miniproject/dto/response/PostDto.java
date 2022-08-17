@@ -16,7 +16,7 @@ public class PostDto {
     private long id;
     private String boardName;
     private String title;
-    private String username;
+    private String nickname;
     private LocalDateTime createAt;
 
     public PostDto(Post post){
@@ -27,7 +27,7 @@ public class PostDto {
         this.id = post.getId();
         this.boardName = post.getBoard().getName();
         this.title = post.getTitle();
-        this.username = post.getUser().getUsername();
+        this.nickname = post.getUser().getNickname();
         this.createAt = post.getCreatedAt();
     }
 }

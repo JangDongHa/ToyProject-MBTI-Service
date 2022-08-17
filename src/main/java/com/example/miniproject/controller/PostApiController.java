@@ -4,6 +4,7 @@ import com.example.miniproject.config.jwt.token.RequestToken;
 import com.example.miniproject.dto.request.PostRequestDto;
 import com.example.miniproject.dto.request.RequestCommentDto;
 import com.example.miniproject.dto.response.CommentDto;
+import com.example.miniproject.dto.request.PostUpdateRequestDto;
 import com.example.miniproject.dto.response.PostDto;
 import com.example.miniproject.dto.response.PostResponseDto;
 import com.example.miniproject.dto.response.ResponseDto;
@@ -13,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 import java.util.List;
 
 @CrossOrigin("*")
@@ -40,12 +42,50 @@ public class PostApiController {
         return new ResponseDto<>(HttpStatus.OK, postService.getPostByTitle(title));
     }
 
-    @PostMapping("/api/board/{boardName}")
-    public ResponseDto<String> createPost(@RequestBody PostRequestDto requestDto) {
-        //return new PostResponseDto(HttpStatus.OK, postService.createPost(requestDto));
-        return null;
 
+    private String getUsername(HttpServletRequest request){
+        RequestToken requestToken = new RequestToken(request);
+        return requestToken.getUsername().orElseThrow();
     }
+
+    //게시글 등록
+    @PostMapping("/api/board/{boardName}")
+    public ResponseDto<Boolean> createPost(@PathVariable String boardName,
+                                                   @RequestBody PostRequestDto requestDto,
+                                                   HttpServletRequest request){
+        postService.createPost(boardName, getUsername(request), requestDto);
+        return new ResponseDto<>(HttpStatus.OK, true);
+    }
+
+
+    //게시글 조회
+    @GetMapping("/api/board/{boardName}/id/{postSyntax}")
+
+    public ResponseDto<PostResponseDto> getPost(@PathVariable String boardName,
+                                                @PathVariable Long postSyntax){
+        return new ResponseDto<>(HttpStatus.OK, postService.getPost(boardName,postSyntax));
+    }
+    
+    //게시글 수정
+    @Transactional
+    @PutMapping("/api/board/{boardName}/id/{postSyntax}")
+    public ResponseDto<PostResponseDto> updatePost(@PathVariable String boardName,
+                                                   @PathVariable Long postSyntax,
+                                                   @RequestBody PostUpdateRequestDto postUpdateRequestDto,
+                                                   HttpServletRequest request){
+
+        return new ResponseDto<>(HttpStatus.OK,postService.updatePost(boardName, postSyntax, postUpdateRequestDto, getUsername(request)) );
+    }
+
+    //게시글 삭제
+    @DeleteMapping("/api/board/{boardName}/id/{postSyntax}")
+    public ResponseDto<Boolean> deletePost(@PathVariable String boardName,
+                                           @PathVariable Long postSyntax,
+                                           HttpServletRequest request){
+        postService.deletePost(boardName, postSyntax, getUsername(request));
+        return new ResponseDto<>(HttpStatus.OK, true);
+    }
+
 
     @PostMapping("/api/{boardName}/id/{postSyntax}/comment")
     public ResponseDto<Boolean> registerComment (@PathVariable String boardName, HttpServletRequest request, @RequestBody RequestCommentDto requestCommentDto) {
@@ -58,14 +98,16 @@ public class PostApiController {
     @PutMapping("/api/{boardName}/id/{postSyntax}/comment/{commentId}")
     public ResponseDto<Boolean> updateComment (@PathVariable Long commentId,HttpServletRequest request,@RequestBody RequestCommentDto requestCommentDto ){
         postService.updateComment(commentId,getUsername(request),requestCommentDto);
-        return new ResponseDto<>(HttpStatus.OK, true);
     }
+
 
     @DeleteMapping("/api/{boardName}/id/{postId}/comment/{commentId}")
     public  ResponseDto<Boolean> deleteComment (HttpServletRequest request, @PathVariable Long commentId){
         postService.deleteComment(getUsername(request), commentId);
         return new ResponseDto<>(HttpStatus.OK, true);
     }
+    
+    
 
 
 }

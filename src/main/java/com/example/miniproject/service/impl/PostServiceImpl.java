@@ -11,6 +11,7 @@ import com.example.miniproject.domain.user.UserRepository;
 import com.example.miniproject.dto.request.PostRequestDto;
 import com.example.miniproject.dto.request.RequestCommentDto;
 import com.example.miniproject.dto.response.CommentDto;
+import com.example.miniproject.dto.request.PostUpdateRequestDto;
 import com.example.miniproject.dto.response.PostDto;
 import com.example.miniproject.dto.response.PostResponseDto;
 import com.example.miniproject.service.PostService;
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+
 @Service
 @RequiredArgsConstructor
 public class PostServiceImpl implements PostService {
@@ -31,6 +33,7 @@ public class PostServiceImpl implements PostService {
 
     private final CommentRepository commentRepository;
     private final BoardRepository boardRepository;
+    private final UserRepository userRepository;
 
     private final UserRepository userRepository;
 
@@ -91,6 +94,61 @@ public class PostServiceImpl implements PostService {
         }
 
     }
+
+    public PostResponseDto createPost(String boardName, String username, PostRequestDto requestDto) {
+        Board board = boardRepository.findByName(boardName).orElseThrow();
+        User user = userRepository.findByUsername(username).orElseThrow();
+        long postSyntax = postRepository.findpost_syntaxByBoardId(board.getId()).orElse(0L) + 1 ;
+
+        Post post = Post.builder()
+                .board(board)
+                .title(requestDto.getTitle())
+                .content(requestDto.getContent())
+                .user(user)
+                .post_syntax(postSyntax)
+                .build();
+
+        return new PostResponseDto(postRepository.save(post));
+    }
+
+    public PostResponseDto getPost(String boardName, Long postSyntax) {
+        Board board = boardRepository.findByName(boardName).orElseThrow(IllegalCallerException::new);
+        Post post = postRepository.findByBoardAndpost_syntax(board.getId(), postSyntax).orElseThrow();
+        PostResponseDto postResponseDto = new PostResponseDto(post);
+
+        postResponseDto.setTitle(post.getTitle());
+        postResponseDto.setUsername(post.getUser().getUsername());
+        postResponseDto.setContent(post.getContent());
+
+        return postResponseDto;
+    }
+
+    @Transactional
+    public PostResponseDto updatePost(String boardName,
+                                      Long postSyntax,
+                                      PostUpdateRequestDto postUpdateRequestDto,
+                                      String username) {
+        Board board = boardRepository.findByName(boardName).orElseThrow();
+        User user = userRepository.findByUsername(username).orElseThrow();
+        Post post = postRepository.findByBoardAndpost_syntax(board.getId(), postSyntax).orElseThrow();
+
+        if(post.getUser().getUsername().equals(username)){
+            post.update(postUpdateRequestDto);
+        }
+
+        return new PostResponseDto(postRepository.save(post));
+    }
+
+
+    @Transactional
+    public void deletePost(String boardName,
+                           Long postSyntax,
+                           String username) {
+        Board board = boardRepository.findByName(boardName).orElseThrow();
+        Post post = postRepository.findByBoardAndpost_syntax(board.getId(), postSyntax).orElseThrow();
+
+        if(post.getUser().getUsername().equals(username)){
+            postRepository.delete(post);
+        }
+    }
 }
-
-

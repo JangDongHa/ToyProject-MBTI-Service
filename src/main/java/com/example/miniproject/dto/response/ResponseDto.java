@@ -11,4 +11,6 @@ import org.springframework.http.HttpStatus;
 public class ResponseDto<T>{
     HttpStatus httpStatus;
     T data;
+
+
 }
