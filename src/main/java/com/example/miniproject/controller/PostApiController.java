@@ -42,12 +42,6 @@ public class PostApiController {
         return new ResponseDto<>(HttpStatus.OK, postService.getPostByTitle(title));
     }
 
-
-    private String getUsername(HttpServletRequest request){
-        RequestToken requestToken = new RequestToken(request);
-        return requestToken.getUsername().orElseThrow();
-    }
-
     //게시글 등록
     @PostMapping("/api/board/{boardName}")
     public ResponseDto<Boolean> createPost(@PathVariable String boardName,
@@ -67,7 +61,6 @@ public class PostApiController {
     }
     
     //게시글 수정
-    @Transactional
     @PutMapping("/api/board/{boardName}/id/{postSyntax}")
     public ResponseDto<PostResponseDto> updatePost(@PathVariable String boardName,
                                                    @PathVariable Long postSyntax,
@@ -88,16 +81,17 @@ public class PostApiController {
 
 
     @PostMapping("/api/{boardName}/id/{postSyntax}/comment")
-    public ResponseDto<Boolean> registerComment (@PathVariable String boardName, HttpServletRequest request, @RequestBody RequestCommentDto requestCommentDto) {
-        postService.registerComment(boardName,getUsername(request),requestCommentDto);
+    public ResponseDto<Boolean> registerComment (@PathVariable String boardName, @PathVariable long postSyntax, HttpServletRequest request, @RequestBody RequestCommentDto requestCommentDto) {
+        postService.registerComment(boardName,getUsername(request),requestCommentDto, postSyntax);
         return new ResponseDto<>(HttpStatus.OK, true);
     }
 
 
 
     @PutMapping("/api/{boardName}/id/{postSyntax}/comment/{commentId}")
-    public ResponseDto<Boolean> updateComment (@PathVariable Long commentId,HttpServletRequest request,@RequestBody RequestCommentDto requestCommentDto ){
-        postService.updateComment(commentId,getUsername(request),requestCommentDto);
+    public ResponseDto<Boolean> updateComment (@PathVariable Long commentId,HttpServletRequest request,@RequestBody RequestCommentDto requestCommentDto ) {
+        postService.updateComment(commentId, getUsername(request), requestCommentDto);
+        return new ResponseDto<>(HttpStatus.OK, true);
     }
 
 

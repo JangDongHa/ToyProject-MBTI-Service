@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @Setter
 public class CommentDto {
     private long id;
-    private String title;
+    private String content;
     private String username;
     private LocalDateTime createAt;
 
@@ -26,7 +26,7 @@ public class CommentDto {
 
     public void setByComment(Comment comment) {
         this.id = comment.getId();
-        this.title = comment.getPost().getTitle();
+        this.content = comment.getContent();
         this.username = comment.getUser().getUsername();
         this.createAt = comment.getCreatedAt();
     }

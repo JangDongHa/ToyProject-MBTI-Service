@@ -35,7 +35,6 @@ public class PostServiceImpl implements PostService {
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
 
-    private final UserRepository userRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -62,16 +61,17 @@ public class PostServiceImpl implements PostService {
     }
 
 
+    @Override
     @Transactional
-    public CommentDto registerComment(String boardName, String username, RequestCommentDto requestCommentDto) {
+    public CommentDto registerComment(String boardName, String username, RequestCommentDto requestCommentDto, long reqPostSyntax) {
         Board board = boardRepository.findByName(boardName).orElseThrow();
-        long postSyntax = postRepository.findpost_syntaxByBoardId(board.getId()).orElse(0L);
-        Post post = postRepository.findByBoardAndpost_syntax(board.getId(), postSyntax).orElseThrow();
+        Post post = postRepository.findByBoardAndpost_syntax(board.getId(), reqPostSyntax).orElseThrow();
         User user = userRepository.findByUsername(username).orElseThrow();
         Comment comment = Comment.builder().board(board).user(user).post(post).content(requestCommentDto.getContent()).build();
         return new CommentDto(commentRepository.save(comment));
     }
 
+    @Override
     @Transactional
     public Boolean updateComment(Long commentId, String username, RequestCommentDto requestCommentDto) {
         Comment comment = commentRepository.findById(commentId).orElseThrow();
@@ -83,6 +83,7 @@ public class PostServiceImpl implements PostService {
         }
     }
 
+    @Override
     @Transactional
     public Boolean deleteComment(String username, Long commentId) {
         Comment comment = commentRepository.findById(commentId).orElseThrow();
@@ -95,6 +96,8 @@ public class PostServiceImpl implements PostService {
 
     }
 
+    @Override
+    @Transactional
     public PostResponseDto createPost(String boardName, String username, PostRequestDto requestDto) {
         Board board = boardRepository.findByName(boardName).orElseThrow();
         User user = userRepository.findByUsername(username).orElseThrow();
@@ -111,6 +114,8 @@ public class PostServiceImpl implements PostService {
         return new PostResponseDto(postRepository.save(post));
     }
 
+    @Override
+    @Transactional(readOnly = true)
     public PostResponseDto getPost(String boardName, Long postSyntax) {
         Board board = boardRepository.findByName(boardName).orElseThrow(IllegalCallerException::new);
         Post post = postRepository.findByBoardAndpost_syntax(board.getId(), postSyntax).orElseThrow();
@@ -123,6 +128,7 @@ public class PostServiceImpl implements PostService {
         return postResponseDto;
     }
 
+    @Override
     @Transactional
     public PostResponseDto updatePost(String boardName,
                                       Long postSyntax,
@@ -140,6 +146,7 @@ public class PostServiceImpl implements PostService {
     }
 
 
+    @Override
     @Transactional
     public void deletePost(String boardName,
                            Long postSyntax,
