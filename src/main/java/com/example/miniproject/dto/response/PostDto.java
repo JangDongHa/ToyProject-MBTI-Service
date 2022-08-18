@@ -24,7 +24,7 @@ public class PostDto {
     }
 
     public void setByPost(Post post){
-        this.id = post.getId();
+        this.id = post.getPost_syntax();
         this.boardName = post.getBoard().getName();
         this.title = post.getTitle();
         this.nickname = post.getUser().getNickname();
