@@ -162,5 +162,7 @@ public class PostServiceImpl implements PostService {
         if(post.getUser().getUsername().equals(username)){
             postRepository.delete(post);
         }
+        else
+            throw new IllegalArgumentException();
     }
 }
