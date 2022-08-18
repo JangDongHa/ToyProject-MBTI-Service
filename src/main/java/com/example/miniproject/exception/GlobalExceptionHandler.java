@@ -3,6 +3,7 @@ package com.example.miniproject.exception;
 import com.auth0.jwt.exceptions.SignatureVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.example.miniproject.dto.response.ResponseDto;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -38,5 +39,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = SecurityException.class)
     public ResponseDto<Boolean> passwordInconsistency(SecurityException e){
         return new ResponseDto<>(HttpStatus.NOT_ACCEPTABLE, false);
+    }
+
+    @ExceptionHandler(value = DataIntegrityViolationException.class)
+    public ResponseDto<Boolean> dataIntegrityViolationException(DataIntegrityViolationException e){
+        return new ResponseDto<>(HttpStatus.CONFLICT, false);
     }
 }

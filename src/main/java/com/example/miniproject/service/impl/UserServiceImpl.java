@@ -37,10 +37,10 @@ public class UserServiceImpl implements UserService {
     }
 
     private void checkUsernameAndPassword(String username, String password){
-        if (!(username.length() >= 4 && username.length() <= 12 && !findStr("[^a-zA-Z0-9]", username))) // a~z, A~Z, 0~9 문자가 이외가 포함되면 false를 출력
+        if (!(username.length() >= 5 && username.length() <= 20 && !findStr("[^a-zA-Z0-9]", username))) // 5~20, 영문 or 숫자만 허용
             throw new IllegalArgumentException(ExceptionNamingHandler.USERNAME_ERROR);
 
-        if (!(password.length() >= 4 && password.length() <= 32 && !findStr("[^a-z0-9]", password))) // a~z, 0~9 문자가 이외가 포함되면 false를 출력
+        if (!(password.length() >= 8 && findStr("[a-zA-Z]", password) && findStr("[0-9]", password))) // 8+, 영문 and 숫자만 허용
             throw new IllegalArgumentException(ExceptionNamingHandler.PASSWORD_ERROR);
     }
 
