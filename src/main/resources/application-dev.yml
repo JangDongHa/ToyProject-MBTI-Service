@@ -13,9 +13,9 @@ spring:
     allow-circular-references: true
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/mbti?serverTimezone=Asia/Seoul
-    username: cos
-    password: cos1234
+    url: jdbc:mysql://database-1.czwa1zqemqal.ap-northeast-2.rds.amazonaws.com/miniProject?serverTimezone=Asia/Seoul
+    username: miniProject
+    password: Dnr:4fkdgo!
 
   jpa:
     hibernate:

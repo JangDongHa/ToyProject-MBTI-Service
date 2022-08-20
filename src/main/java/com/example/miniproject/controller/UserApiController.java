@@ -7,7 +7,6 @@ import com.example.miniproject.dto.request.RequestUpdateUserDto;
 import com.example.miniproject.dto.request.RequestUserDto;
 import com.example.miniproject.dto.response.ResponseDto;
 import com.example.miniproject.dto.response.UserDto;
-import com.example.miniproject.service.UserService;
 import com.example.miniproject.service.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

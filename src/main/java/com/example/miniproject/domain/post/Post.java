@@ -24,13 +24,10 @@ public class Post extends Timestamped {
 
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
-    private Long id;
+    private Long post_syntax;
 
     @Column(length = 100)
     private String title;
-
-    @Column
-    private Long post_syntax;
 
     @Lob
     private String content;

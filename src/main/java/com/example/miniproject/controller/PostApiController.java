@@ -3,7 +3,6 @@ package com.example.miniproject.controller;
 import com.example.miniproject.config.jwt.token.RequestToken;
 import com.example.miniproject.dto.request.PostRequestDto;
 import com.example.miniproject.dto.request.RequestCommentDto;
-import com.example.miniproject.dto.response.CommentDto;
 import com.example.miniproject.dto.request.PostUpdateRequestDto;
 import com.example.miniproject.dto.response.PostDto;
 import com.example.miniproject.dto.response.PostResponseDto;
@@ -14,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.transaction.Transactional;
 import java.util.List;
 
 @CrossOrigin("*")

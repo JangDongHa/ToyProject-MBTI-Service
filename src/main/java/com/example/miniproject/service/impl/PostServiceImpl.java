@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -68,6 +69,10 @@ public class PostServiceImpl implements PostService {
         Post post = postRepository.findByBoardAndpost_syntax(board.getId(), reqPostSyntax).orElseThrow();
         User user = userRepository.findByUsername(username).orElseThrow();
         Comment comment = Comment.builder().board(board).user(user).post(post).content(requestCommentDto.getContent()).build();
+
+        if (!StringUtils.hasText(comment.getContent())) {
+           throw new RuntimeException("댓글을 생성해주세요.");
+        }
         return new CommentDto(commentRepository.save(comment));
     }
 
@@ -122,7 +127,7 @@ public class PostServiceImpl implements PostService {
         PostResponseDto postResponseDto = new PostResponseDto(post);
 
         postResponseDto.setTitle(post.getTitle());
-        postResponseDto.setUsername(post.getUser().getUsername());
+        postResponseDto.setNickname(post.getUser().getNickname());
         postResponseDto.setContent(post.getContent());
 
         return postResponseDto;
@@ -135,7 +140,6 @@ public class PostServiceImpl implements PostService {
                                       PostUpdateRequestDto postUpdateRequestDto,
                                       String username) {
         Board board = boardRepository.findByName(boardName).orElseThrow();
-        User user = userRepository.findByUsername(username).orElseThrow();
         Post post = postRepository.findByBoardAndpost_syntax(board.getId(), postSyntax).orElseThrow();
 
         if(post.getUser().getUsername().equals(username)){
